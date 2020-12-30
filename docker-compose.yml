@@ -1,0 +1,50 @@
+version: "3"
+services:
+  frontend:
+    build: # 개발 환경을 위한 Dockerfile 이 어디있는지 알려줌
+      dockerfile: Dockerfile.dev
+      context: ./frontend
+    volumes: # 코드 수정이 바로 반영 되기 위해 volume 이용
+      - /app/node_modules # node_modules 참조 x
+      - ./frontend:/app # WORKDIR 참조
+    stdin_open: true # 리액트 버그 잡아줌
+
+  nginx: 
+    restart: always # 재시작 정책 (always - 항상)
+    build: # 개발 환경을 위한 Dockerfile 이 어디있는지 알려줌
+      dockerfile: Dockerfile
+      context: ./nginx
+    ports: # 포트 맵핑
+      - "3000:80"
+
+  backend:
+    build: # 개발 환경을 위한 Dockerfile 이 어디있는지 알려줌
+      dockerfile: Dockerfile.dev
+      context: ./backend
+    container_name: app_backend
+    volumes:
+      - /app/node_modules
+      - ./backend:/app
+    environment: 
+      MYSQL_HOST: mysql
+      MYSQL_USER: root 
+      MYSQL_ROOT_PASSWORD: johnahn777
+      MYSQL_DATABASE: myapp
+      MYSQL_PORT: 3306   
+  
+  # local mysql 대신 AWS 의 RDS (아마존 DB 관리 서비스) 이용
+  # mysql:
+  #   build: ./mysql
+  #   restart: unless-stopped # 임의로 멈추는 거 뺴고 항상 재시작
+  #   container_name: app_mysql
+  #   ports:
+  #     - "3306:3306" # mysql 기본 port 3306
+  #   volumes: # 컨테이너를 지우더라도 DB자료를 지워지지 않게하기위한 volume
+  #     - ./mysql/mysql_data:/var/lib/mysql
+  #     - ./mysql/sqls/:/docker-entrypoint-initdb.d/
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: jspark98
+  #     MYSQL_DATABASE: myapp
+  # volume -> 컨테이너 안에 저장 되지 않고 호스트 파일시스템에 저장됨
+  # 그중에서도 도커에 의해서만 통제되는 도커 area 에 저장되어 
+  # 컨테이너를 삭제해도 데이터는 유지
