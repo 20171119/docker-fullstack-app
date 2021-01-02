@@ -28,11 +28,11 @@ services:
     environment: 
       MYSQL_HOST: mysql
       MYSQL_USER: root 
-      MYSQL_ROOT_PASSWORD: johnahn777
+      MYSQL_ROOT_PASSWORD: jspark98
       MYSQL_DATABASE: myapp
       MYSQL_PORT: 3306   
   
-  # local mysql 대신 AWS 의 RDS (아마존 DB 관리 서비스) 이용
+  # # local mysql 대신 AWS 의 RDS (아마존 DB 관리 서비스) 이용
   # mysql:
   #   build: ./mysql
   #   restart: unless-stopped # 임의로 멈추는 거 뺴고 항상 재시작
@@ -45,6 +45,6 @@ services:
   #   environment:
   #     MYSQL_ROOT_PASSWORD: jspark98
   #     MYSQL_DATABASE: myapp
-  # volume -> 컨테이너 안에 저장 되지 않고 호스트 파일시스템에 저장됨
-  # 그중에서도 도커에 의해서만 통제되는 도커 area 에 저장되어 
-  # 컨테이너를 삭제해도 데이터는 유지
+  # # volume -> 컨테이너 안에 저장 되지 않고 호스트 파일시스템에 저장됨
+  # # 그중에서도 도커에 의해서만 통제되는 도커 area 에 저장되어 
+  # # 컨테이너를 삭제해도 데이터는 유지

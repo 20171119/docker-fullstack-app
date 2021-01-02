@@ -3,21 +3,21 @@
     "containerDefinitions": [
         {
             "name": "frontend",
-            "image": "smileajw1004/docker-frontend",
+            "image": "jspark98/docker-frontend",
             "hostname": "frontend",
             "essential": false,
             "memory": 128
         },
         {
             "name": "backend",
-            "image": "smileajw1004/docker-backend",
+            "image": "jspark98/docker-backend",
             "hostname": "backend",
             "essential": false,
             "memory": 128
         },
         {
             "name": "nginx",
-            "image": "smileajw1004/docker-nginx",
+            "image": "jspark98/docker-nginx",
             "hostname": "nginx",
             "essential": true,
             "portMappings": [

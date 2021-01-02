@@ -21,3 +21,16 @@ after_success: #테스트 성공ㅎ 이미지 빌드
   - docker push jspark98/docker-frontend # 도커허브에 빌드된 이미지 푸쉬
   - docker push jspark98/docker-backend
   - docker push jspark98/docker-nginx
+
+deploy:
+  provider: elasticbeanstalk
+  region: "ap-northeast-2"
+  app: "docker-fullstack-app"
+  env: "DockerFullstackApp-env"
+  bucket_name: elasticbeanstalk-ap-northeast-2-888725167512
+  bucket_path: "docker-fullstack-app"
+  on:
+    branch: master
+  
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
