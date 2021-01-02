@@ -1,0 +1,37 @@
+language: generic
+
+sudo: required
+
+services: #docker 환경이라고 travis 에게 선언
+  - docker
+
+before_install: # 테스트 실행전 도커이미지 생성
+  - docker build -t jspark98/react-test-app -f ./frontend/Dockerfile.dev ./frontend
+
+script: # test 실행
+  - docker run -e CI=true jspark98/react-test-app npm test
+
+after_success: #테스트 성공ㅎ 이미지 빌드
+  - docker build -t jspark98/docker-frontend ./frontend
+  - docker build -t jspark98/docker-backend ./backend
+  - docker build -t jspark98/docker-nginx ./nginx
+
+  - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_ID" --password-stdin #도커허브 로그인
+
+  - docker push jspark98/docker-frontend # 도커허브에 빌드된 이미지 푸쉬
+  - docker push jspark98/docker-backend
+  - docker push jspark98/docker-nginx
+
+# deploy: # (배포) AWS Elastic beastalk이 업데이트된 빌드이미지 가져갈수있도록 설정
+#   provider: elast
+#   icbeanstalk
+#   region: "ap-northeast-2"
+#   app: "docker-fullstack-app"
+#   env: "DockerFullstackApp-env"
+#   bucket_name: elasticbeanstalk-ap-northeast-2-972153559337
+#   bucket_path: "docker-fullstack-app"
+#   on:
+#     branch: master
+  
+#   access_key_id: $AWS_ACCESS_KEY
+#   secret_access_key: $AWS_SECRET_ACCESS_KEY
